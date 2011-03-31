@@ -7,11 +7,6 @@ PManager::PManager(QWidget *parent) :
     ui(new Ui::PManager)
 {
     ui->setupUi(this);
-//    ui->add_prod_type->setEnabled(false);
-//    ui->save_prod_type->setEnabled(false);
-
-//    ui->prod_type_name_ed->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z]{3,12}$"), 0));
-    // :TODO protect from SQL injections
 
     ui->del_prod_type->setEnabled(false);
     selected_row = -1;
@@ -21,10 +16,13 @@ PManager::PManager(QWidget *parent) :
 
     db = EDBconnection::getInstance();
 
-    ui->prod_types_table->setColumnWidth(1, 300);
     //
     ui->prod_treeWidget->hideColumn(4);
-    updateProdList();
+    ui->suppliers_types_table->hideColumn(3);
+    ui->prod_types_table->setColumnWidth(1, 300);
+    ui->suppliers_types_table->setColumnWidth(2, 180);
+
+    updateSuppliersList();
 }
 
 PManager::~PManager()
@@ -37,6 +35,8 @@ void PManager::startP(void)
     updateProdTypesList();
     this->show();
 }
+
+// PRODUCT TYPES
 
 void PManager::on_add_prod_type_clicked()
 {
@@ -69,12 +69,11 @@ void PManager::updateProdTypesList(void)
 
 void PManager::updateProdList(void)
 {
-//    pt.description as prod_type_dscr,
     QString query = QString("SELECT pt.name as type_name, " \
-                                            " p.title as product_title, p.description as prod_dscr," \
-                                            " p.extra_charge as extra_charge, p.rating as rating, p.id as id" \
-                                            " FROM products AS p INNER JOIN product_types AS pt" \
-                                            " ON p.product_type_id=pt.id ORDER BY type_name");
+                            " p.title as product_title, p.description as prod_dscr," \
+                            " p.extra_charge as extra_charge, p.rating as rating, p.id as id" \
+                            " FROM products AS p INNER JOIN product_types AS pt" \
+                            " ON p.product_type_id=pt.id ORDER BY type_name");
 
     QList<QStringList> List = db->get(query);
 
@@ -130,8 +129,8 @@ void PManager::on_prod_types_table_cellActivated(int row, int column)
 void PManager::on_save_prod_type_clicked()
 {
     qDebug("save");
-    QString new_name = ui->prod_type_name_ed->text();
-    QString new_description = ui->prod_type_dscr_ed->toPlainText();
+    QString new_name = db->escape(ui->prod_type_name_ed->text());
+    QString new_description = db->escape(ui->prod_type_dscr_ed->toPlainText());
 
     QString name = ui->prod_types_table->item(selected_row, 0)->text();
     QString query = QString("UPDATE product_types SET name='%1', description='%2' WHERE name = '%3'")
@@ -145,7 +144,7 @@ void PManager::on_save_prod_type_clicked()
 void PManager::on_del_prod_type_clicked()
 {
     qDebug("delete");
-    QString name = ui->prod_types_table->item(selected_row, 0)->text();
+    QString name = db->escape(ui->prod_types_table->item(selected_row, 0)->text());
     QString query = QString("DELETE FROM product_types WHERE name = '%1'").arg(name);
     EDBconnection::getInstance()->query(query);
     ui->prod_type_name_ed->clear();
@@ -156,10 +155,13 @@ void PManager::on_del_prod_type_clicked()
 void PManager::on_tabWidget_currentChanged(int index)
 {
     switch (index) {
-    case 0 : updateProdTypesList();  break;
-    case 1 : updateProdList();  break;
+    case 0 : updateProdTypesList(); break;
+    case 1 : updateProdList(); break;
+    case 2 : updateSuppliersList(); break;
     }
 }
+
+// PRODUCTS
 
 void PManager::on_prod_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
 {
@@ -210,14 +212,15 @@ void PManager::on_add_update_btn_clicked()
     double extra_chrge = ui->extra_charge_dsb->value();
     double rating = ui->rating_dsb->value();
 
-    if (prod_title.isEmpty()) return;
+    if (prod_type.isEmpty() || prod_title.isEmpty()) return;
 
     if (ui->prod_treeWidget->currentItem()->parent() != 0) {
         qDebug("Update");
 
         // Update suppliers_resources
-        QString query = QString("UPDATE products SET title = '%1', description = '%2', extra_charge = '%3', rating = '%4' WHERE id = '%5'")
-                                .arg(prod_title).arg(prod_dscr).arg(extra_chrge).arg(rating).arg(ui->prod_treeWidget->currentItem()->text(4));
+        QString query = QString("UPDATE products SET title = '%1', description = '%2', extra_charge = '%3', rating = '%4' "\
+                                "WHERE id = '%5'").arg(prod_title).arg(prod_dscr).arg(extra_chrge).arg(rating)
+                                .arg(ui->prod_treeWidget->currentItem()->text(4));
         db->query(query);
 
     } else if (ui->prod_treeWidget->indexOfTopLevelItem(ui->prod_treeWidget->currentItem()) == 0) {
@@ -235,8 +238,9 @@ void PManager::on_add_update_btn_clicked()
         }
 
         // Insert resource (UNIQUE)
-        query = QString("INSERT INTO products(product_type_id, title, description, extra_charge, rating) VALUES('%1', '%2', '%3', '%4', '%5') ")
-                                .arg(prod_type_id).arg(prod_title).arg(prod_dscr).arg(extra_chrge).arg(rating);
+        query = QString("INSERT INTO products(product_type_id, title, description, extra_charge, rating) " \
+                        "VALUES('%1', '%2', '%3', '%4', '%5') ")
+                        .arg(prod_type_id).arg(prod_title).arg(prod_dscr).arg(extra_chrge).arg(rating);
         int res_id = db->insert(query);
 
         if (res_id == -1) {
@@ -256,8 +260,8 @@ void PManager::on_delete_btn_clicked()
     qDebug("delete");
 
     int result = QMessageBox::question( 0, trUtf8("Внимание"),
-                                                                trUtf8("Вы действительно хотите удалить этот товар?"),
-                                                                QMessageBox::Yes, QMessageBox::No );
+                                        trUtf8("Вы действительно хотите удалить этот товар?"),
+                                        QMessageBox::Yes, QMessageBox::No );
 
     if (result == QMessageBox::Yes) {
 
@@ -268,15 +272,150 @@ void PManager::on_delete_btn_clicked()
     }
 }
 
+// SUPPLIERS
+
 void PManager::updateSuppliersList(void)
 {
-    QList<QStringList> List = EDBconnection::getInstance()->get("SELECT name, description FROM product_types");
+    QList<QStringList> List = EDBconnection::getInstance()->get("SELECT name, distance, contacts, id FROM suppliers");
 
     if (!List.isEmpty()) {
-        ui->prod_types_table->setRowCount(List.length());
+        ui->suppliers_types_table->setRowCount(List.length());
         for (int i = 0; i < List.length(); ++i)
             for (int j = 0; j < List.at(0).length(); ++j)
-                ui->->setItem(i, j, new QTableWidgetItem(List[i].at(j));
+                ui->suppliers_types_table->setItem(i, j, new QTableWidgetItem(List[i].at(j)));
+    } else {
+        qDebug("List is empty");
+    }
+}
+
+void PManager::on_add_supplier_btn_clicked()
+{
+    QString name = db->escape(ui->supplier_name_le->text());
+    QString contacts = db->escape(ui->supplier_contacts_te->toPlainText());
+    double  distance = ui->supplier_distance_dsb->value();
+
+    if (!name.isEmpty() && !contacts.isEmpty() && distance != 0.0) {
+        QString query = QString("INSERT INTO suppliers (name, distance, contacts, regdate) VALUES('%1', '%2', '%3', '%4')")
+                                .arg(name).arg(distance).arg(contacts)
+                                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd HH-mm-ss"));
+
+        EDBconnection::getInstance()->insert(query);
+
+        updateSuppliersList();
+    }
+}
+
+void PManager::on_suppliers_types_table_cellClicked(int row, int column)
+{
+    Q_UNUSED(column);
+    ui->supplier_name_le->setText(ui->suppliers_types_table->item(row, 0)->text());
+    ui->supplier_contacts_te->setText(ui->suppliers_types_table->item(row, 2)->text());
+    ui->supplier_distance_dsb->setValue(ui->suppliers_types_table->item(row, 1)->text().toDouble());
+    ui->save_supplier_btn->setEnabled(true);
+    ui->del_supplier_btn->setEnabled(true);
+}
+
+void PManager::on_save_supplier_btn_clicked()
+{
+    qDebug("save");
+    QString name = db->escape(ui->supplier_name_le->text());
+    QString contacts = db->escape(ui->supplier_contacts_te->toPlainText());
+    double  distance = ui->supplier_distance_dsb->value();
+
+    int current_supplier_id = ui->suppliers_types_table->item(ui->suppliers_types_table->currentRow(), 3)->text().toInt();
+
+    QString query = QString("UPDATE suppliers SET name='%1', distance='%2', contacts='%3' WHERE id = '%4'")
+            .arg(name).arg(distance).arg(contacts).arg(current_supplier_id);
+
+    EDBconnection::getInstance()->query(query);
+
+    updateSuppliersList();
+}
+
+void PManager::on_del_supplier_btn_clicked()
+{
+    // Delete supplier
+    qDebug("delete");
+
+    int result = QMessageBox::question( 0, trUtf8("Внимание"),
+                                        trUtf8("Вы действительно хотите удалить этого поставщика?"),
+                                        QMessageBox::Yes, QMessageBox::No );
+
+    if (result == QMessageBox::Yes) {
+
+        int current_supplier = ui->suppliers_types_table->item(ui->suppliers_types_table->currentRow(), 3)->text().toInt();
+
+        QString query = QString("DELETE FROM suppliers WHERE id='%1'").arg(current_supplier);
+        db->query(query);
+
+        updateSuppliersList();
+    }
+}
+
+// PRICE LIST
+
+void PManager::updatePriceList(void)
+{
+    /*
+        SELECT CONCAT(pt.name, " ", p.title) as product, s.name as supplier, prc.price, prc.number
+        FROM price AS prc
+        INNER JOIN suppliers AS s ON s.id=prc.supplier_id
+        INNER JOIN products  AS p ON p.id=prc.product_id
+        INNER JOIN product_types AS pt ON p.product_type_id=pt.id
+    */
+
+    QString query = "SELECT CONCAT(pt.name, " ", p.title) as product FROM products AS p " \
+                    "INNER JOIN product_types AS pt ON p.product_type_id=pt.id";
+
+    QList<QStringList> products_List = db->get(query);
+
+    if (!products_List.isEmpty()) {
+//        ui->suppliers_types_table->setRowCount(products_List.length());
+        for (int i = 0; i < products_List.length(); ++i)
+            for (int j = 0; j < products_List.at(0).length(); ++j)
+                ui->suppliers_types_table->setItem(i, j, new QTableWidgetItem(products_List[i].at(j)));
+    } else {
+        qDebug("List is empty");
+    }
+
+    QList<QStringList> suppliers_List = db->get("SELECT name FROM suppliers");
+
+    if (!suppliers_List.isEmpty()) {
+        ui->suppliers_types_table->setRowCount(suppliers_List.length());
+        for (int i = 0; i < suppliers_List.length(); ++i)
+            for (int j = 0; j < suppliers_List.at(0).length(); ++j)
+                ui->suppliers_types_table->setItem(i, j, new QTableWidgetItem(suppliers_List[i].at(j)));
+    } else {
+        qDebug("List is empty");
+    }
+}
+
+void PManager::on_new_price_rec_btn_clicked()
+{
+    ui->suppliers_types_table->clear();
+    ui->suppliers_types_table->setRowCount(1);
+
+    QString query = "SELECT CONCAT(pt.name, " ", p.title) as product FROM products AS p " \
+                    "INNER JOIN product_types AS pt ON p.product_type_id=pt.id";
+
+    QList<QStringList> products_List = db->get(query);
+
+    if (!products_List.isEmpty()) {
+//        ui->suppliers_types_table->setRowCount(products_List.length());
+        for (int i = 0; i < products_List.length(); ++i)
+            for (int j = 0; j < products_List.at(0).length(); ++j)
+                ui->suppliers_types_table->setItem(i, j, new QTableWidgetItem(products_List[i].at(j)));
+    } else {
+        qDebug("List is empty");
+    }
+
+    QList<QStringList> suppliers_List = db->get("SELECT name FROM suppliers");
+
+    if (!suppliers_List.isEmpty()) {
+        ui->suppliers_types_table->setRowCount(suppliers_List.length());
+        for (int i = 0; i < suppliers_List.length(); ++i)
+            for (int j = 0; j < suppliers_List.at(0).length(); ++j)
+                ui->suppliers_types_table->setItem(i, j, new QTableWidgetItem(suppliers_List[i].at(j)));
     } else {
         qDebug("List is empty");
     }

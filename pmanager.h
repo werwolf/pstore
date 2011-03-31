@@ -30,6 +30,11 @@ private slots:
     void on_prod_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
     void on_add_update_btn_clicked();
     void on_delete_btn_clicked();
+    void on_add_supplier_btn_clicked();
+    void on_suppliers_types_table_cellClicked(int row, int column);
+    void on_save_supplier_btn_clicked();
+    void on_del_supplier_btn_clicked();
+    void on_new_price_rec_btn_clicked();
 
 private:
     Ui::PManager *ui;
@@ -42,6 +47,7 @@ private:
     void updateProdTypesList(void);
     void updateProdList(void);
     void updateSuppliersList(void);
+    void updatePriceList(void);
 };
 
 #endif // PMANAGER_H
