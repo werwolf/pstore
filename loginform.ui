@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginForm</class>
+ <widget class="QDialog" name="LoginForm">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>235</width>
+    <height>210</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>235</width>
+    <height>210</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>235</width>
+    <height>280</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Login</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QToolBox" name="toolBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="tabSpacing">
+      <number>-1</number>
+     </property>
+     <widget class="QWidget" name="login">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>217</width>
+        <height>138</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <attribute name="label">
+       <string>Вход</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Тип</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="user_typeCBox">
+         <property name="minimumSize">
+          <size>
+           <width>140</width>
+           <height>0</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>покупатель</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>менеджер</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>администратор</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="loginLabel">
+         <property name="text">
+          <string>Логин</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="loginEdit">
+         <property name="maxLength">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="pwdLabel">
+         <property name="text">
+          <string>Пароль</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="pwdEdit">
+         <property name="inputMethodHints">
+          <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText</set>
+         </property>
+         <property name="maxLength">
+          <number>20</number>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>267</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="enterButton">
+           <property name="text">
+            <string>Войти</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="registration">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>200</width>
+        <height>193</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <attribute name="label">
+       <string>Регистрация</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="regLoginLabel">
+         <property name="text">
+          <string>Логин&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="regLoginEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="regPwdLabel">
+         <property name="text">
+          <string>Пароль&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="regPwdEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;	
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lastnameLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Фамилия&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lastnameEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="nameLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Имя&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="nameEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="addressLable">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Адрес</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="addressEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;	
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(60, 100, 255, 160), stop:1 rgba(60, 102, 255, 160));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="phoneLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Тел.</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="phoneEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="emailLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>E-mail</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="emailEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>45</number>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QPushButton" name="registrationButton">
+         <property name="text">
+          <string>Регистрация</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
